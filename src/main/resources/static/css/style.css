@@ -1,0 +1,117 @@
+/* Brand colours */
+:root {
+  --brand: #0d6efd;
+  --brand-dark: #0a58ca;
+  --published-bg: #d1e7dd;
+  --published-text: #0f5132;
+  --draft-bg: #e2e3e5;
+  --draft-text: #41464b;
+}
+
+/* ── Layout ── */
+body {
+  background: #f0f2f5;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+/* ── Stat cards ── */
+.stat-card {
+  border: none;
+  border-radius: 12px;
+  transition: transform .2s, box-shadow .2s;
+  cursor: default;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+.stat-card .card-title {
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  opacity: .75;
+}
+.stat-card .stat-value {
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ── Table ── */
+#tutorials-table thead {
+  background: #343a40;
+  color: #fff;
+}
+#tutorials-table thead th {
+  font-weight: 500;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+#tutorials-table tbody tr:hover {
+  background: #e9f0ff;
+}
+#tutorials-table tbody td {
+  vertical-align: middle;
+}
+
+/* ── Badges ── */
+.badge-published {
+  background: var(--published-bg);
+  color: var(--published-text);
+  padding: .35em .75em;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-weight: 600;
+}
+.badge-draft {
+  background: var(--draft-bg);
+  color: var(--draft-text);
+  padding: .35em .75em;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-weight: 600;
+}
+
+/* ── Action buttons ── */
+.btn-action {
+  padding: .2rem .55rem;
+  font-size: .78rem;
+  border-radius: 6px;
+}
+
+/* ── Search bar ── */
+#search-input {
+  max-width: 280px;
+}
+
+/* ── Empty state ── */
+#empty-state {
+  color: #6c757d;
+}
+
+/* ── Toast ── */
+.toast-container {
+  z-index: 1090;
+}
+.toast {
+  min-width: 260px;
+  animation: slideIn .25s ease;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+  #search-input { max-width: 100%; }
+  .stat-card .stat-value { font-size: 1.8rem; }
+  #tutorials-table th:nth-child(1),
+  #tutorials-table td:nth-child(1) { display: none; } /* hide ID col on xs */
+}
