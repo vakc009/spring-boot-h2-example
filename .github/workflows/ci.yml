@@ -67,4 +67,7 @@ jobs:
             --platform=managed \
             --allow-unauthenticated \
             --port=8080 \
-            --project=${{ env.PROJECT_ID }}
+            --project=${{ env.PROJECT_ID }} \
+            --add-cloudsql-instances=${{ env.PROJECT_ID }}:${{ env.REGION }}:spring-boot-db \
+            --service-account=github-actions@${{ env.PROJECT_ID }}.iam.gserviceaccount.com \
+            --set-env-vars="SPRING_PROFILES_ACTIVE=prod,DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
