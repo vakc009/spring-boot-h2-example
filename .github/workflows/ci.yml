@@ -9,6 +9,7 @@ on:
 env:
   PROJECT_ID: spring-boot-demo-487908
   REGION: us-central1
+  ZONE: us-central1-a
   REPO: spring-boot-repo
   IMAGE: spring-boot-r2dbc-h2
 
@@ -60,7 +61,7 @@ jobs:
       - name: Get GKE credentials
         run: |
           gcloud container clusters get-credentials ${{ vars.CLUSTER_NAME }} \
-            --region=${{ env.REGION }} \
+            --zone=${{ env.ZONE }} \
             --project=${{ env.PROJECT_ID }}
 
       - name: Upsert db-credentials secret
