@@ -11,7 +11,6 @@ env:
   REGION: us-central1
   REPO: spring-boot-repo
   IMAGE: spring-boot-r2dbc-h2
-  SERVICE: spring-boot-r2dbc-h2
 
 jobs:
   build:
@@ -58,16 +57,31 @@ jobs:
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
 
-      - name: Deploy to Cloud Run
+      - name: Get GKE credentials
         run: |
-          IMAGE_URI=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:${{ github.sha }}
-          gcloud run deploy ${{ env.SERVICE }} \
-            --image=$IMAGE_URI \
+          gcloud container clusters get-credentials ${{ vars.CLUSTER_NAME }} \
             --region=${{ env.REGION }} \
-            --platform=managed \
-            --allow-unauthenticated \
-            --port=8080 \
-            --project=${{ env.PROJECT_ID }} \
-            --add-cloudsql-instances=${{ env.PROJECT_ID }}:${{ env.REGION }}:spring-boot-db \
-            --service-account=github-actions@${{ env.PROJECT_ID }}.iam.gserviceaccount.com \
-            --set-env-vars="SPRING_PROFILES_ACTIVE=prod,DB_USER=${{ vars.DB_USER }},DB_PASSWORD=${{ vars.DB_PASSWORD }}"
+            --project=${{ env.PROJECT_ID }}
+
+      - name: Upsert db-credentials secret
+        run: |
+          kubectl create secret generic db-credentials \
+            --namespace=spring-boot \
+            --from-literal=username=${{ secrets.DB_USER }} \
+            --from-literal=password=${{ secrets.DB_PASSWORD }} \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Apply Kubernetes manifests
+        env:
+          IMAGE_TAG: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:${{ github.sha }}
+        run: |
+          kubectl apply -f k8s/namespace.yaml
+          kubectl apply -f k8s/service.yaml
+          kubectl apply -f k8s/ingress.yaml
+          envsubst < k8s/deployment.yaml | kubectl apply -f -
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/spring-boot-r2dbc \
+            --namespace=spring-boot \
+            --timeout=300s
