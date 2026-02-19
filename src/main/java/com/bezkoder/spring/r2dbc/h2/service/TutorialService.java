@@ -38,6 +38,9 @@ public class TutorialService {
         .flatMap(optionalTutorial -> {
           if (optionalTutorial.isPresent()) {
             tutorial.setId(id);
+            if (tutorial.getTitle() != null && !tutorial.getTitle().startsWith("Update")) {
+              tutorial.setTitle("Update " + tutorial.getTitle());
+            }
             return tutorialRepository.save(tutorial);
           }
 

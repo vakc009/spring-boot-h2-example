@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.bezkoder</groupId>
-	<artifactId>spring-boot-r2dbc-h2-example</artifactId>
+	<artifactId>spring-boot-h2-example</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-boot-r2dbc-h2-example</name>
 	<description>Spring Boot R2DBC and H2 example: CRUD Rest API</description>
