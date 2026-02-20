@@ -65,6 +65,9 @@ jobs:
           location: ${{ env.ZONE }}
           project_id: ${{ env.PROJECT_ID }}
 
+      - name: Apply namespace
+        run: kubectl apply -f k8s/namespace.yaml
+
       - name: Upsert db-credentials secret
         run: |
           kubectl create secret generic db-credentials \
@@ -77,7 +80,6 @@ jobs:
         env:
           IMAGE_TAG: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:${{ github.sha }}
         run: |
-          kubectl apply -f k8s/namespace.yaml
           kubectl apply -f k8s/service.yaml
           kubectl apply -f k8s/ingress.yaml
           envsubst < k8s/deployment.yaml | kubectl apply -f -
