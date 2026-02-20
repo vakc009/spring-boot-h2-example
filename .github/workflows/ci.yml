@@ -102,7 +102,9 @@ jobs:
           kubectl get pods --namespace=spring-boot -o wide
           echo "=== Describe pods ==="
           kubectl describe pods --namespace=spring-boot
-          echo "=== App logs ==="
-          kubectl logs --namespace=spring-boot -l app=spring-boot-r2dbc -c app --tail=50 || true
+          echo "=== App logs (current) ==="
+          kubectl logs --namespace=spring-boot -l app=spring-boot-r2dbc -c app --tail=200 || true
+          echo "=== App logs (previous crash) ==="
+          kubectl logs --namespace=spring-boot -l app=spring-boot-r2dbc -c app --tail=200 --previous || true
           echo "=== Proxy logs ==="
           kubectl logs --namespace=spring-boot -l app=spring-boot-r2dbc -c cloud-sql-proxy --tail=50 || true
