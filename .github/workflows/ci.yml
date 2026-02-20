@@ -69,9 +69,7 @@ jobs:
         run: kubectl apply -f k8s/namespace.yaml
 
       - name: Apply service account
-        env:
-          GCP_SA_EMAIL: ${{ vars.GCP_SA_EMAIL }}
-        run: envsubst < k8s/serviceaccount.yaml | kubectl apply -f -
+        run: kubectl apply -f k8s/serviceaccount.yaml
 
       - name: Upsert db-credentials secret
         run: |
