@@ -59,10 +59,11 @@ jobs:
           docker push $IMAGE_URI
 
       - name: Get GKE credentials
-        run: |
-          gcloud container clusters get-credentials ${{ vars.CLUSTER_NAME }} \
-            --zone=${{ env.ZONE }} \
-            --project=${{ env.PROJECT_ID }}
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ vars.CLUSTER_NAME }}
+          location: ${{ env.ZONE }}
+          project_id: ${{ env.PROJECT_ID }}
 
       - name: Upsert db-credentials secret
         run: |
