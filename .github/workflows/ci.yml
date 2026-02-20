@@ -89,3 +89,15 @@ jobs:
           kubectl rollout status deployment/spring-boot-r2dbc \
             --namespace=spring-boot \
             --timeout=300s
+
+      - name: Debug pod state on failure
+        if: failure()
+        run: |
+          echo "=== Pods ==="
+          kubectl get pods --namespace=spring-boot -o wide
+          echo "=== Describe pods ==="
+          kubectl describe pods --namespace=spring-boot
+          echo "=== App logs ==="
+          kubectl logs --namespace=spring-boot -l app=spring-boot-r2dbc -c app --tail=50 || true
+          echo "=== Proxy logs ==="
+          kubectl logs --namespace=spring-boot -l app=spring-boot-r2dbc -c cloud-sql-proxy --tail=50 || true
